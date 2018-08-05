@@ -15,7 +15,7 @@ Some common function and class
     - knn.py: KNN library, include 3 example
         1. SimpleKnnClassify: simple test for only few data
         2. DatingMatch: improving matches from a dating site with kNN
-        3.
+        3. DigitRecognition: classify digits for 32 * 32 gray image file
 
 
 ### NeuralNetworks

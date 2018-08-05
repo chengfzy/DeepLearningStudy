@@ -1,5 +1,6 @@
 import numpy as np
 import operator
+import os
 from common.debug_info import *
 
 
@@ -117,13 +118,73 @@ class DatingMatch:
         return norm_dataset, ranges, min_vals
 
 
-if __name__ == '__main__':
-    # Simple KNN Test
-    print(section("Simple KNN Test"))
-    simple_classify = SimpleKnnClassify()
-    simple_classify.test()
+class DigitRecognition:
+    """
+    KNN to classify digits for 32 * 32 text file(processed from gray image)
+    """
 
-    # Dating Matching
-    print(section("Dating Match"))
-    dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
-    dating_match.test()
+    def __init__(self, training_folder, test_folder):
+        self.__trainging_folder = training_folder
+        self.__test_folder = test_folder
+
+    def test(self):
+        training_labels = []
+        training_files = os.listdir(self.__trainging_folder)
+        n = len(training_files)
+        training_data = np.zeros((n, 1024))
+        for i in range(n):
+            file_name = training_files[i]
+            training_labels.append(int(file_name.split('.')[0].split('_')[0]))
+            training_data[i, :] = self.__img2vector(self.__trainging_folder + '/' + file_name)
+
+        # iterate through the test set
+        error_count = 0.0
+        test_files = os.listdir(self.__test_folder)
+        m = len(test_files)
+        for i in range(m):
+            file_name = test_files[i]
+            label = int(file_name.split('.')[0].split('_')[0])
+            data = self.__img2vector(self.__test_folder + '/' + file_name)
+            # KNN classify
+            result = classify(data, training_data, training_labels, 3)
+            print("(result, real answer) = ({0}, {1})".format(result, label), end=' ')
+            if label == result:
+                print("")
+            else:
+                print("Error")
+                error_count += 1.0
+
+        print("The total number of errors is {0}".format(error_count))
+        print("The total error rate is {0}".format(error_count / m))
+
+    def __img2vector(self, filename):
+        """
+        read data from text file and save to vector of 1024 size
+        :param filename: text file name
+        :return: 1024 vector
+        """
+        return_vec = np.zeros((1, 1024))
+        file = open(filename)
+        for i in range(32):
+            line = file.readline()
+            for j in range(32):
+                return_vec[0, 32 * i + j] = int(line[j])
+        return return_vec
+
+
+
+if __name__ == '__main__':
+    # # Simple KNN Test
+    # print(section("Simple KNN Test"))
+    # simple_classify = SimpleKnnClassify()
+    # simple_classify.test()
+    #
+    # # Dating Matching
+    # print(section("Dating Match"))
+    # dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
+    # dating_match.test()
+
+    # Digit Recognition
+    print(section("Digit Recognition"))
+    digit_recognition = DigitRecognition('../../data/digits/training', '../../data/digits/test')
+    digit_recognition.test()
