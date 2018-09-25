@@ -1,3 +1,7 @@
+"""
+K-Nearest Neighbor
+"""
+
 import numpy as np
 import operator
 import os
@@ -6,7 +10,7 @@ from common.debug_info import *
 
 def classify(x, dataset, labels, k):
     """
-    k neighbor nearest algorithm
+    k-nearest neighbor algorithm
     :param x:       input data value, vector to compare to existing dataset (1xN)
     :param dataset: size m data set of known vector(N x M)
     :param labels:  data set labels (1xM vector)
@@ -174,15 +178,15 @@ class DigitRecognition:
 
 
 if __name__ == '__main__':
-    # # Simple KNN Test
-    # print(section("Simple KNN Test"))
-    # simple_classify = SimpleKnnClassify()
-    # simple_classify.test()
-    #
-    # # Dating Matching
-    # print(section("Dating Match"))
-    # dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
-    # dating_match.test()
+    # Simple KNN Test
+    print(section("Simple KNN Test"))
+    simple_classify = SimpleKnnClassify()
+    simple_classify.test()
+
+    # Dating Matching
+    print(section("Dating Match"))
+    dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
+    dating_match.test()
 
     # Digit Recognition
     print(section("Digit Recognition"))
