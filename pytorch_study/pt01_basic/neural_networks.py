@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
 
 class Net(nn.Module):
@@ -34,8 +35,54 @@ class Net(nn.Module):
 
 
 if __name__ == '__main__':
-    print('pytorch version = ', torch.__version__)
-    # net = Net()
-    # print(net)
+    print('pytorch version = {0}'.format(torch.__version__))
 
+    # show net info
+    net = Net()
+    print('Net = {0}'.format(net))
 
+    # parameters
+    params = list(net.parameters())
+    print('params size = {0}'.format(len(params)))
+    print('param[0].size = {0}'.format(params[0].size()))
+
+    # try a random 32x32 input
+    input = torch.randn(1, 1, 32, 32)
+    out = net(input)
+    print('out = {0}'.format(out))
+
+    # zero the gradient buffers of all parameter and backprops with random gradients
+    net.zero_grad()
+    out.backward(torch.randn(1, 10))
+
+    # loss function
+    output = net(input)
+    target = torch.randn(10)  # a dummy target
+    target = target.view(1, -1)
+    criterion = nn.MSELoss()
+    loss = criterion(output, target)
+    print('loss = {0}'.format(loss))
+    # graph function list: input->conv2d->relu->maxpool2d->conv2d->relu->maxpool2d->view->linear->relu->linear
+    # ->relu->linear->MSELoss->loss
+    print(loss.grad_fn)  # MSELoss
+    print(loss.grad_fn.next_functions[0][0])  # linear
+    print(loss.grad_fn.next_functions[0][0].next_functions[0][0])  # relu
+
+    # backprop
+    net.zero_grad()
+    print('conv1.bias.grad before backward = {0}'.format(net.conv1.bias.grad))
+    loss.backward()
+    print('conv1.bias.grad after backward = {0}'.format(net.conv1.bias.grad))
+
+    # update the weights
+    learning_rate = 0.01
+    for f in net.parameters():
+        f.data.sub_(f.grad.data * learning_rate)
+
+    # optimize
+    optimizer = optim.SGD(net.parameters(), lr=0.01)
+    optimizer.zero_grad()
+    output = net(input)
+    loss = criterion(output, target)
+    loss.backward()
+    optimizer.step()  # do the update
