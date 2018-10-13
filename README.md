@@ -27,13 +27,15 @@ Some common function and class
 
 ### pytorch_study
 1. pt01_basic   \
-    Basic use of pytorch. from A 60 Minute Blitz of pytorch tutorials
+    Basic use of pytorch. from Get Started of pytorch tutorials
     - basic_usage.py. 
         Ref: https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html
     - neural_networks.py. 
         Ref: https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html#sphx-glr-beginner-blitz-neural-networks-tutorial-py
     - training_classifier.py. 
         Ref: https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html#sphx-glr-beginner-blitz-cifar10-tutorial-py
+    - data_loading.py
+        Ref: https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
 1. pt02_simple  \
     Some code and study from morvan python
     Ref: https://morvanzhou.github.io/tutorials/machine-learning/torch/
