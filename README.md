@@ -42,8 +42,14 @@ Some common function and class
         Ref: https://pytorch.org/tutorials/beginner/saving_loading_models.html
     
 1. pt02_simple  \
-    Some code and study from morvan python
+    Some code and study from morvan python. \
     Ref: https://morvanzhou.github.io/tutorials/machine-learning/torch/
+    
+1. pt03_image   \
+    - finetuning_torchvision_models.py  \
+        Ref: https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
+    - spatial_transformer.py    \
+        Ref: https://pytorch.org/tutorials/intermediate/spatial_transformer_tutorial.html
 
 ### Monte-Carlo
 1. MC01_Basic   \
