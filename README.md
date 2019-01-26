@@ -10,6 +10,10 @@ Some common function and class
 1. dating: Data collect for each person for dating. [Info](./data/dating/info.md)
 1. digits: 32 * 32 gray image with 0~9 expressed by 0/1 text
 
+### tools
+1. draw_chinese_text: draw chinese text on image
+
+
 ### machine_learning
 1. ml01_knn \
     k-nearest neighbors and include 3 example.
