@@ -44,6 +44,8 @@ Some common function and class
         Ref: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     - saveing_loading_models.py \
         Ref: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+    - trace_model.py    \
+        Ref: https://pytorch.org/tutorials/advanced/cpp_export.html
     
 1. pt02_simple  \
     Some code and study from morvan python. \
