@@ -46,7 +46,7 @@ def restore_net():
     plt.plot(x.data.numpy(), prediction.data.numpy(), 'r-')
 
 
-def restor_params():
+def restore_params():
     # restore only the parameters in net1 to net3
     net3 = torch.nn.Sequential(
         torch.nn.Linear(1, 10),
@@ -70,6 +70,6 @@ save()
 # restore entire net(may slow)
 restore_net()
 # restore only the net parameters
-restor_params()
+restore_params()
 
 plt.show()

@@ -1,15 +1,17 @@
-from __future__ import print_function
-from __future__ import division
+from __future__ import division, print_function
+
+import copy
+import os
+import time
+
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
-import os
-import copy
+
 from common.debug_info import *
 
 
@@ -23,7 +25,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
     best_acc = 0.0
 
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print(f'Epoch {epoch}/{num_epochs - 1}')
 
         # each epoch has a training and validation phase
         for phase in ['train', 'val']:
@@ -46,13 +48,13 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
                 # forward, track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     # get model output and calculate loss. Special case for inception because in training it has an
-                    # auxiliary output. In train mode we calculate the loss by summing the final output and the auxiliary
-                    # output but in testing we only consider the final output
+                    # auxiliary output. In train mode we calculate the loss by summing the final output and the
+                    # auxiliary output but in testing we only consider the final output
                     if is_inception and phase == 'train':
                         outputs, aux_outpus = model(inputs)
                         loss1 = criterion(outputs, labels)
                         loss2 = criterion(aux_outpus, labels)
-                        loss = loss1 + loss2
+                        loss = loss1 + 0.4 * loss2
                     else:
                         outputs = model(inputs)
                         loss = criterion(outputs, labels)
@@ -69,7 +71,7 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
 
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
-            print('{} Loss: {:.4f}, Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+            print(f'{phase} Loss: {epoch_loss:.4f}, Acc: {epoch_acc:.4f}')
 
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
@@ -81,8 +83,8 @@ def train_model(model, dataloaders, criterion, optimizer, num_epochs=25, is_ince
         print()
 
     time_elapsed = time.time() - since
-    print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-    print('Best val Acc: {:.4f}'.format(best_acc))
+    print(f'Training complete in {time_elapsed // 60:.0f}m {time_elapsed % 60:.0f}s')
+    print(f'Best val Acc: {best_acc:.4f}')
 
     # load best model weights
     model.load_state_dict(best_model_wts)
@@ -109,32 +111,32 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
         input_size = 224
     elif model_name == 'alexnet':
         model_ft = models.alexnet(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extraxt)
+        set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier[6].in_features
         model_ft.classifier[6] = nn.Linear(num_ftrs, num_classes)
         input_size = 224
     elif model_name == 'vgg':
         model_ft = models.vgg11_bn(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extraxt)
+        set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier[6].in_features
         model_ft.classifier[6] = nn.Linear(num_ftrs, num_classes)
         input_size = 224
     elif model_name == 'squeezenet':
         model_ft = models.squeezenet1_0(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extraxt)
+        set_parameter_requires_grad(model_ft, feature_extract)
         model_ft.classifier[1] = nn.Conv2d(512, num_classes, kernel_size=(1, 1), stride=(1, 1))
         model_ft.num_classes = num_classes
         input_size = 224
     elif model_name == 'densenet':
         model_ft = models.densenet121(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extraxt)
+        set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.classifier.in_features
         model_ft.classifier = nn.Linear(num_ftrs, num_classes)
         input_size = 224
     elif model_name == 'inception':
         # expects(299, 299) sized images and has auxiliary output
         model_ft = models.inception_v3(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extraxt)
+        set_parameter_requires_grad(model_ft, feature_extract)
         # handle the auxilary net
         num_ftrs = model_ft.AuxLogits.fc.in_features
         model_ft.AuxLogits.fc = nn.Linear(num_ftrs, num_classes)
@@ -150,27 +152,26 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
 
 
 if __name__ == '__main__':
-    print('Pytorch Version: ', torch.__version__)
-    print('Torchvision Version: ', torchvision.__version__)
+    print(f'Pytorch Version: {torch.__version__}')
+    print(f'Torchvision Version: {torchvision.__version__}')
 
     # top level data directory
-    data_dir = '../../../../dataset/hymenoptera_data'
+    data_dir = '../../data/hymenoptera_data'
     # model to choose from [resnet, alexnet, vgg, squeezenet, densenet, inception]
-    model_name = 'squeezenet'  # 'squeezenet'
+    model_name = 'resnet'  # 'squeezenet'
     # number of classes in the dataset
     num_classes = 2
     # batch size for training
     batch_size = 8
     # number of epochs to train for
     num_epochs = 15
-    # flag for feature extracting.
-    # When False, we finetune the whole model, when True we only update the reshaped layer params
-    feature_extraxt = True
+    # flag for feature extracting, False for finetune the whole model, True if only update the reshaped layer params
+    feature_extract = True
 
-    model_ft, input_size = initialize_model(model_name, num_classes, feature_extraxt, use_pretrained=True)
+    model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
     print(model_ft)
 
-    # data augmentation and normalization for training, just normlization for validation
+    # data augmentation and normalization for training, just normalization for validation
     data_transforms = {
         'train': transforms.Compose([
             transforms.RandomResizedCrop(input_size),
@@ -203,7 +204,7 @@ if __name__ == '__main__':
     # gather the parameters to be optimized/updated in this run
     params_to_update = model_ft.parameters()
     print('Params to learn:')
-    if feature_extraxt:
+    if feature_extract:
         params_to_update = []
         for name, param in model_ft.named_parameters():
             if param.requires_grad:
@@ -236,7 +237,7 @@ if __name__ == '__main__':
     shist = [h.cpu().numpy() for h in scratch_hist]
     plt.title('Validation Accuracy vs. Number of Training Epochs')
     plt.xlabel('Training Epochs')
-    plt.ylabel('Validataion Accuracy')
+    plt.ylabel('Validation Accuracy')
     plt.plot(range(1, num_epochs + 1), ohist, label='Pretrained')
     plt.plot(range(1, num_epochs + 1), shist, label='Scratch')
     plt.ylim(0, 1.)
