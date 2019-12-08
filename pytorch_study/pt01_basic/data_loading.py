@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
 from optparse import OptionParser
-from common.debug_info import *
+import common
 
 
 def show_landmarks(image, landmarks):
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     options, args = parser.parse_args()
 
     # 1. simple usage
-    print(section('Simple Usage'))
+    print(common.Section('Simple Usage'))
     landmarks_frame = pd.read_csv(options.folder + 'face_landmarks.csv')
     n = 65
     img_name = landmarks_frame.iloc[n, 0]
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     # plt.show()
 
     # 2. use as a Dataset
-    print(section('Use as a Dataset'))
+    print(common.Section('Use as a Dataset'))
     face_dataset = FaceLandmarksDataset(csv_file=os.path.join(options.folder, 'face_landmarks.csv'),
                                         root_dir=options.folder)
     fig = plt.figure()
@@ -162,7 +162,7 @@ if __name__ == '__main__':
             break
 
     # 3. resize, crop and transform
-    print(section('Resize, Crop and Transform'))
+    print(common.Section('Resize, Crop and Transform'))
     scale = Rescale(256)
     crop = RandomCrop(128)
     composed = transforms.Compose([Rescale(256), RandomCrop(224)])
@@ -178,7 +178,7 @@ if __name__ == '__main__':
     # plt.show()
 
     # 4. put all together to create a dataset with composed transforms
-    print(section('Put All together to Create a Dataset'))
+    print(common.Section('Put All together to Create a Dataset'))
     transformed_dataset = FaceLandmarksDataset(csv_file=os.path.join(options.folder, 'face_landmarks.csv'),
                                                root_dir=options.folder,
                                                transform=transforms.Compose(
@@ -190,7 +190,7 @@ if __name__ == '__main__':
             break
 
     # 5. Batch version
-    print(section('Batch Version'))
+    print(common.Section('Batch Version'))
     dataloader = DataLoader(transformed_dataset, batch_size=4, shuffle=True, num_workers=4)
     for i_batched, sample_batched in enumerate(dataloader):
         print(i_batched, sample_batched['image'].size(), sample_batched['landmarks'].size())

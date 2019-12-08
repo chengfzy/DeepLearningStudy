@@ -12,7 +12,7 @@ import time
 import os
 import copy
 from optparse import OptionParser
-from common.debug_info import *
+import common
 
 
 def imshow(inp, title=None):
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     plt.show()
 
     # fine tuning the convnet
-    print(section('fine tuning the convnet'))
+    print(common.Section('fine tuning the convnet'))
     model_ft = models.resnet18(pretrained=True)
     num_ftrs = model_ft.fc.in_features
     model_ft.tc = nn.Linear(num_ftrs, 2)
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=25)
 
     # convenet as fixed feature extractor
-    print(section('convnet as fixed feature extractor'))
+    print(common.Section('convnet as fixed feature extractor'))
     model_conv = torchvision.models.resnet18(pretrained=True)
     for param in model_conv.parameters():
         param.requires_grad = False

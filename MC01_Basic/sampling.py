@@ -2,6 +2,7 @@ import numpy as np
 
 index2word = ["I", "Love", "Cheng", "Do"]
 
+
 def sample_discrete(vec):
     u = np.random.rand()
     start = 0

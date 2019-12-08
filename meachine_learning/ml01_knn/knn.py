@@ -5,7 +5,7 @@ K-Nearest Neighbor
 import numpy as np
 import operator
 import os
-from common.debug_info import *
+import common
 
 
 def classify(x, dataset, labels, k):
@@ -176,19 +176,18 @@ class DigitRecognition:
         return return_vec
 
 
-
 if __name__ == '__main__':
     # Simple KNN Test
-    print(section("Simple KNN Test"))
+    print(common.Section("Simple KNN Test"))
     simple_classify = SimpleKnnClassify()
     simple_classify.test()
 
     # Dating Matching
-    print(section("Dating Match"))
+    print(common.Section("Dating Match"))
     dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
     dating_match.test()
 
     # Digit Recognition
-    print(section("Digit Recognition"))
+    print(common.Section("Digit Recognition"))
     digit_recognition = DigitRecognition('../../data/digits/training', '../../data/digits/test')
     digit_recognition.test()

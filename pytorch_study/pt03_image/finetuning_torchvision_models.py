@@ -12,7 +12,7 @@ import torch.optim as optim
 import torchvision
 from torchvision import datasets, models, transforms
 
-from common.debug_info import *
+import common
 
 
 # Model Training and Validation Code
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         ])
     }
 
-    print(section('Initializing Datasets and DataLoaders'))
+    print(common.Section('Initializing Datasets and DataLoaders'))
     # create training and validation datasets
     image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x), data_transforms[x]) for x in ['train', 'val']}
     # create training and validation dataloaders

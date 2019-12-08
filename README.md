@@ -4,7 +4,7 @@ Some Study Code about Deep Learning
 ## Contents
 ### common
 Some common function and class
-1. debug_info: include the section, sub-section debug info
+1. heading: include the Title, Section, SubSection, Paragraph heading info
 
 ### data
 1. dating: Data collect for each person for dating. [Info](./data/dating/info.md)
