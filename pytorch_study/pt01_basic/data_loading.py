@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
 from optparse import OptionParser
-import common
+import util
 
 
 def show_landmarks(image, landmarks):
@@ -106,7 +106,7 @@ class RandomCrop(object):
         top = np.random.randint(0, h - new_h)
         left = np.random.randint(0, w - new_w)
 
-        image = image[top: top + new_h, left: left + new_w]
+        image = image[top:top + new_h, left:left + new_w]
         landmarks = landmarks - [left, top]
 
         return {'image': image, "landmarks": landmarks}
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     options, args = parser.parse_args()
 
     # 1. simple usage
-    print(common.Section('Simple Usage'))
+    print(util.Section('Simple Usage'))
     landmarks_frame = pd.read_csv(options.folder + 'face_landmarks.csv')
     n = 65
     img_name = landmarks_frame.iloc[n, 0]
@@ -144,7 +144,7 @@ if __name__ == '__main__':
     # plt.show()
 
     # 2. use as a Dataset
-    print(common.Section('Use as a Dataset'))
+    print(util.Section('Use as a Dataset'))
     face_dataset = FaceLandmarksDataset(csv_file=os.path.join(options.folder, 'face_landmarks.csv'),
                                         root_dir=options.folder)
     fig = plt.figure()
@@ -162,7 +162,7 @@ if __name__ == '__main__':
             break
 
     # 3. resize, crop and transform
-    print(common.Section('Resize, Crop and Transform'))
+    print(util.Section('Resize, Crop and Transform'))
     scale = Rescale(256)
     crop = RandomCrop(128)
     composed = transforms.Compose([Rescale(256), RandomCrop(224)])
@@ -178,11 +178,12 @@ if __name__ == '__main__':
     # plt.show()
 
     # 4. put all together to create a dataset with composed transforms
-    print(common.Section('Put All together to Create a Dataset'))
+    print(util.Section('Put All together to Create a Dataset'))
     transformed_dataset = FaceLandmarksDataset(csv_file=os.path.join(options.folder, 'face_landmarks.csv'),
                                                root_dir=options.folder,
-                                               transform=transforms.Compose(
-                                                   [Rescale(256), RandomCrop(224), ToTensor()]))
+                                               transform=transforms.Compose([Rescale(256),
+                                                                             RandomCrop(224),
+                                                                             ToTensor()]))
     for i in range(len(transformed_dataset)):
         sample = transformed_dataset[i]
         print(i, sample['image'].size(), sample['landmarks'].size())
@@ -190,7 +191,7 @@ if __name__ == '__main__':
             break
 
     # 5. Batch version
-    print(common.Section('Batch Version'))
+    print(util.Section('Batch Version'))
     dataloader = DataLoader(transformed_dataset, batch_size=4, shuffle=True, num_workers=4)
     for i_batched, sample_batched in enumerate(dataloader):
         print(i_batched, sample_batched['image'].size(), sample_batched['landmarks'].size())

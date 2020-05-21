@@ -12,7 +12,7 @@ import time
 import os
 import copy
 from optparse import OptionParser
-import common
+import util
 
 
 def imshow(inp, title=None):
@@ -122,7 +122,10 @@ def visualize_model(model, num_images=6):
 
 if __name__ == '__main__':
     parser = OptionParser()
-    parser.add_option('-f', '--folder', dest='folder', default='../../../../dataset/hymenoptera_data',
+    parser.add_option('-f',
+                      '--folder',
+                      dest='folder',
+                      default='../../../../dataset/hymenoptera_data',
                       help='dataset folder')
     options, args = parser.parse_args()
 
@@ -130,25 +133,29 @@ if __name__ == '__main__':
 
     # data augmentation and normalization for training
     data_transforms = {
-        'train': transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-        'val': transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
+        'train':
+            transforms.Compose([
+                transforms.RandomResizedCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+        'val':
+            transforms.Compose([
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ])
     }
 
     # data loader
-    image_datasets = {x: datasets.ImageFolder(os.path.join(options.folder, x), data_transforms[x])
-                      for x in ['train', 'val']}
-    dataloaders = {x: DataLoader(image_datasets[x], batch_size=4, shuffle=True, num_workers=2)
-                   for x in ['train', 'val']}
+    image_datasets = {
+        x: datasets.ImageFolder(os.path.join(options.folder, x), data_transforms[x]) for x in ['train', 'val']
+    }
+    dataloaders = {
+        x: DataLoader(image_datasets[x], batch_size=4, shuffle=True, num_workers=2) for x in ['train', 'val']
+    }
     dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
     class_names = image_datasets['train'].classes
     # check device
@@ -163,7 +170,7 @@ if __name__ == '__main__':
     plt.show()
 
     # fine tuning the convnet
-    print(common.Section('fine tuning the convnet'))
+    print(util.Section('fine tuning the convnet'))
     model_ft = models.resnet18(pretrained=True)
     num_ftrs = model_ft.fc.in_features
     model_ft.tc = nn.Linear(num_ftrs, 2)
@@ -177,7 +184,7 @@ if __name__ == '__main__':
     model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler, num_epochs=25)
 
     # convenet as fixed feature extractor
-    print(common.Section('convnet as fixed feature extractor'))
+    print(util.Section('convnet as fixed feature extractor'))
     model_conv = torchvision.models.resnet18(pretrained=True)
     for param in model_conv.parameters():
         param.requires_grad = False

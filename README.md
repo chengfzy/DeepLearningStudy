@@ -2,8 +2,8 @@
 Some Study Code about Deep Learning
 
 ## Contents
-### common
-Some common function and class
+### util
+Some util function and class
 1. heading: include the Title, Section, SubSection, Paragraph heading info
 
 ### data
@@ -32,8 +32,7 @@ Some common function and class
 ### pytorch_study
 1. pt01_basic   \
     Basic use of pytorch. from Get Started of pytorch tutorials
-    - basic_usage.py    \
-        Ref: https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html
+    - basic_usage.py. Ref: [pytorch turtorials](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py)
     - neural_networks.py \
         Ref: https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html#sphx-glr-beginner-blitz-neural-networks-tutorial-py
     - training_classifier.py \

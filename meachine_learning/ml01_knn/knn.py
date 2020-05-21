@@ -5,7 +5,7 @@ K-Nearest Neighbor
 import numpy as np
 import operator
 import os
-import common
+import util
 
 
 def classify(x, dataset, labels, k):
@@ -18,9 +18,9 @@ def classify(x, dataset, labels, k):
     :return:        the most popular class label
     """
     diff_mat = x - dataset
-    square_diff_mat = diff_mat ** 2
+    square_diff_mat = diff_mat**2
     square_dist = square_diff_mat.sum(axis=1)
-    distance = square_dist ** 0.5
+    distance = square_dist**0.5
     sorted_dist_idx = distance.argsort()
     class_count = {}
     for i in range(k):
@@ -72,7 +72,7 @@ class DatingMatch:
         test_num = int(m * self.__test_ratio)
         error_count = 0.0
         for i in range(test_num):
-            result = classify(norm_data[i, :], norm_data[test_num: m, :], labels[test_num: m], 3)
+            result = classify(norm_data[i, :], norm_data[test_num:m, :], labels[test_num:m], 3)
             print("(classifier result, real answer) = ({0}, {1})".format(result, labels[i]), end='')
             if result != labels[i]:
                 print("\tERROR")
@@ -178,16 +178,16 @@ class DigitRecognition:
 
 if __name__ == '__main__':
     # Simple KNN Test
-    print(common.Section("Simple KNN Test"))
+    print(util.Section("Simple KNN Test"))
     simple_classify = SimpleKnnClassify()
     simple_classify.test()
 
     # Dating Matching
-    print(common.Section("Dating Match"))
+    print(util.Section("Dating Match"))
     dating_match = DatingMatch('../../data/dating/datingTestSet2.txt', 0.1)
     dating_match.test()
 
     # Digit Recognition
-    print(common.Section("Digit Recognition"))
+    print(util.Section("Digit Recognition"))
     digit_recognition = DigitRecognition('../../data/digits/training', '../../data/digits/test')
     digit_recognition.test()

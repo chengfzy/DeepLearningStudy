@@ -2,11 +2,12 @@ import torch.nn as nn
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-import common
+import util
 
 
 # Define Model
 class TheModelClass(nn.Module):
+
     def __init__(self):
         super(TheModelClass, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
@@ -34,17 +35,17 @@ if __name__ == '__main__':
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
     # print model's state dict
-    print(common.SubSection("Models's state_dict:"))
+    print(util.SubSection("Models's state_dict:"))
     for param_tensor in model.state_dict():
         print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
     # print optimizer's state dict
-    print(common.SubSection("Optimizer's state_dict"))
+    print(util.SubSection("Optimizer's state_dict"))
     for var_name in optimizer.state_dict():
         print(var_name, "\t", optimizer.state_dict()[var_name])
 
-    # print(common.Section('Saving/Loading Model for Inference'))
-    print(common.SubSection('Saving/Loading State Dict'))
+    # print(util.Section('Saving/Loading Model for Inference'))
+    print(util.SubSection('Saving/Loading State Dict'))
     file = '../../temp/model_state_dict.pth'
     # save
     torch.save(model.state_dict(), file)
