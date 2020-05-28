@@ -1,14 +1,12 @@
 # DeepLearningStudy
 Some Study Code about Deep Learning
 
+
 ## Contents
 ### util
 Some util function and class
 1. heading: include the Title, Section, SubSection, Paragraph heading info
 
-### data
-1. dating: Data collect for each person for dating. [Info](./data/dating/info.md)
-1. digits: 32 * 32 gray image with 0~9 expressed by 0/1 text
 
 ### tools
 1. draw_chinese_text: draw chinese text on image
@@ -20,13 +18,9 @@ Some util function and class
     - SimpleKnnClassify: simple test for only few data
     - DatingMatch: improving matches from a dating site with kNN
     - DigitRecognition: classify digits for 32 * 32 gray image file
+1. MC01_Basic   \
+    Ref: https://applenob.github.io/1_MCMC.html
 
-
-### NeuralNetworks
-1. Eg01_NeuralNetworks
-    - NeuralNetworks.py: Study neural networks.
-    - Classifer.py: Classify image of CIFAR10
-    Ref: https://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html
 
 
 ### pytorch_study
@@ -55,8 +49,3 @@ Some util function and class
         Ref: https://pytorch.org/tutorials/beginner/finetuning_torchvision_models_tutorial.html
     - spatial_transformer.py    \
         Ref: https://pytorch.org/tutorials/intermediate/spatial_transformer_tutorial.html
-
-### Monte-Carlo
-1. MC01_Basic   \
-    Ref: https://applenob.github.io/1_MCMC.html
-
