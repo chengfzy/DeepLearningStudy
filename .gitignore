@@ -112,9 +112,5 @@ cmake-build-*/
 
 # data folder
 data/
-data/mnist/
-data/CIFAR10/
-data/hymenoptera_data/
-data/cifar-10-python.tar.gz
 temp/
 PytorchCppIntegration/config
