@@ -106,8 +106,12 @@ venv.bak/
 # PyCharm
 .idea
 
+# VS Code
+.vscode/
+
 # PytorchCppIntegration cpp files
 cmake-build-*/
+build*/
 .idea/
 
 # data folder
