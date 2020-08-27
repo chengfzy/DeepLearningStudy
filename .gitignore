@@ -108,6 +108,7 @@ venv.bak/
 
 # VS Code
 .vscode/
+.history/
 
 # PytorchCppIntegration cpp files
 cmake-build-*/

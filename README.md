@@ -10,6 +10,7 @@ Some util function and class
 
 ### tools
 1. draw_chinese_text: draw chinese text on image
+1. coco2yolo.py: convert COCO dataset for selected categories and save to YOLO format
 
 
 ### machine_learning
